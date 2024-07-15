@@ -2,8 +2,8 @@ document.addEventListener("DOMContentLoaded", function() {
     const apiKey = "Sj0pkrVEx8hYmgrkIjdIbSuVJeznAYyp"; // Use provided API key
     const form = document.getElementById("cityForm");
     const weatherDiv = document.getElementById("weather");
-    const dailyForecastDiv = document.getElementById("daily-forecast");
-    const hourlyForecastDiv = document.getElementById("hourly-forecast");
+    const dailyForecastContainer = document.getElementById("daily-forecast-container");
+    const hourlyForecastContainer = document.getElementById("hourly-forecast-container");
 
     form.addEventListener("submit", function(event) {
         event.preventDefault();
@@ -24,15 +24,15 @@ document.addEventListener("DOMContentLoaded", function() {
                     fetchHourlyForecast(locationKey);
                 } else {
                     weatherDiv.innerHTML = `<p>City not found.</p>`;
-                    dailyForecastDiv.innerHTML = '';
-                    hourlyForecastDiv.innerHTML = '';
+                    dailyForecastContainer.innerHTML = '';
+                    hourlyForecastContainer.innerHTML = '';
                 }
             })
             .catch(error => {
                 console.error("Error fetching location data:", error);
                 weatherDiv.innerHTML = `<p>Error fetching location data.</p>`;
-                dailyForecastDiv.innerHTML = '';
-                hourlyForecastDiv.innerHTML = '';
+                dailyForecastContainer.innerHTML = '';
+                hourlyForecastContainer.innerHTML = '';
             });
     }
 
@@ -63,12 +63,12 @@ document.addEventListener("DOMContentLoaded", function() {
                 if (data && data.DailyForecasts) {
                     displayDailyForecast(data.DailyForecasts);
                 } else {
-                    dailyForecastDiv.innerHTML = `<p>No daily forecast available.</p>`;
+                    dailyForecastContainer.innerHTML = `<p>No daily forecast available.</p>`;
                 }
             })
             .catch(error => {
                 console.error("Error fetching daily forecast:", error);
-                dailyForecastDiv.innerHTML = `<p>Error fetching daily forecast.</p>`;
+                dailyForecastContainer.innerHTML = `<p>Error fetching daily forecast.</p>`;
             });
     }
 
@@ -81,12 +81,12 @@ document.addEventListener("DOMContentLoaded", function() {
                 if (data && data.length > 0) {
                     displayHourlyForecast(data);
                 } else {
-                    hourlyForecastDiv.innerHTML = `<p>No hourly forecast available.</p>`;
+                    hourlyForecastContainer.innerHTML = `<p>No hourly forecast available.</p>`;
                 }
             })
             .catch(error => {
                 console.error("Error fetching hourly forecast:", error);
-                hourlyForecastDiv.innerHTML = `<p>Error fetching hourly forecast.</p>`;
+                hourlyForecastContainer.innerHTML = `<p>Error fetching hourly forecast.</p>`;
             });
     }
 
@@ -104,37 +104,41 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function displayDailyForecast(forecasts) {
-        let forecastContent = `<h2>5-Day Forecast</h2>`;
+        let forecastContent = '';
         forecasts.forEach(forecast => {
             const date = new Date(forecast.Date).toLocaleDateString();
             const minTemp = forecast.Temperature.Minimum.Value;
             const maxTemp = forecast.Temperature.Maximum.Value;
             const weatherIcon = forecast.Day.Icon;
+            const weatherText = forecast.Day.IconPhrase;
             forecastContent += `
                 <div class="forecast-item">
                     <p>${date}</p>
                     <p>Min: ${minTemp}°C, Max: ${maxTemp}°C</p>
-                    <img src="https://developer.accuweather.com/sites/default/files/${String(weatherIcon).padStart(2, '0')}-s.png" alt="Day Icon">
+                    <p>${weatherText}</p>
+                    <img src="https://developer.accuweather.com/sites/default/files/${String(weatherIcon).padStart(2, '0')}-s.png" alt="${weatherText}">
                 </div>
             `;
         });
-        dailyForecastDiv.innerHTML = forecastContent;
+        dailyForecastContainer.innerHTML = forecastContent;
     }
 
     function displayHourlyForecast(forecasts) {
-        let forecastContent = `<h2>12-Hour Forecast</h2>`;
+        let forecastContent = '';
         forecasts.forEach(forecast => {
             const time = new Date(forecast.DateTime).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
             const temperature = forecast.Temperature.Value;
             const weatherIcon = forecast.WeatherIcon;
+            const weatherText = forecast.IconPhrase;
             forecastContent += `
                 <div class="forecast-item">
                     <p>${time}</p>
                     <p>Temperature: ${temperature}°C</p>
-                    <img src="https://developer.accuweather.com/sites/default/files/${String(weatherIcon).padStart(2, '0')}-s.png" alt="Hourly Icon">
+                    <p>${weatherText}</p>
+                    <img src="https://developer.accuweather.com/sites/default/files/${String(weatherIcon).padStart(2, '0')}-s.png" alt="${weatherText}">
                 </div>
             `;
         });
-        hourlyForecastDiv.innerHTML = forecastContent;
+        hourlyForecastContainer.innerHTML = forecastContent;
     }
 });

@@ -3,28 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Retro Weather App</title>
+    <title>Weather App</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Retro Weather App</h1>
+    <h1>Weather App</h1>
     <form id="cityForm">
         <input type="text" id="cityInput" placeholder="Enter city name" required>
         <button type="submit">Get Weather</button>
     </form>
-    <div id="weather">
-        <!-- Weather data will be inserted here -->
+    <div id="current-weather" class="hidden">
+        <h2>Current Weather</h2>
+        <div class="forecast-item" id="current-weather-container">
+
+        </div>
     </div>
     <div id="daily-forecast">
         <h2>5-Day Forecast</h2>
         <div class="forecast-container" id="daily-forecast-container">
-            <!-- Daily forecast will be inserted here -->
+
         </div>
     </div>
     <div id="hourly-forecast">
         <h2>12-Hour Forecast</h2>
         <div class="forecast-container" id="hourly-forecast-container">
-            <!-- Hourly forecast will be inserted here -->
+            
         </div>
     </div>
     <script src="app.js"></script>

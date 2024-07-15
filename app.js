@@ -1,7 +1,8 @@
 document.addEventListener("DOMContentLoaded", function() {
-    const apiKey = "w4EyDPAJhvaChfYGiAFBK0A0cVHyxb75"; // Use provided API key
+    const apiKey = "burOyIGOuejIVhICX1KILbACknldDk4O"; 
     const form = document.getElementById("cityForm");
-    const weatherDiv = document.getElementById("weather");
+    const currentWeather = document.getElementById("current-weather");
+    const currentWeatherContainer = document.getElementById("current-weather-container");
     const dailyForecastContainer = document.getElementById("daily-forecast-container");
     const hourlyForecastContainer = document.getElementById("hourly-forecast-container");
 
@@ -23,14 +24,16 @@ document.addEventListener("DOMContentLoaded", function() {
                     fetchDailyForecast(locationKey);
                     fetchHourlyForecast(locationKey);
                 } else {
-                    weatherDiv.innerHTML = `<p>City not found.</p>`;
+                    currentWeatherContainer.innerHTML = `<p>City not found.</p>`;
+                    currentWeather.classList.add('hidden');
                     dailyForecastContainer.innerHTML = '';
                     hourlyForecastContainer.innerHTML = '';
                 }
             })
             .catch(error => {
                 console.error("Error fetching location data:", error);
-                weatherDiv.innerHTML = `<p>Error fetching location data.</p>`;
+                currentWeatherContainer.innerHTML = `<p>Error fetching location data.</p>`;
+                currentWeather.classList.add('hidden');
                 dailyForecastContainer.innerHTML = '';
                 hourlyForecastContainer.innerHTML = '';
             });
@@ -43,14 +46,17 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(response => response.json())
             .then(data => {
                 if (data && data.length > 0) {
-                    displayWeather(data[0]);
+                    displayCurrentWeather(data[0]);
+                    currentWeather.classList.remove('hidden');
                 } else {
-                    weatherDiv.innerHTML = `<p>No weather data available.</p>`;
+                    currentWeatherContainer.innerHTML = `<p>No weather data available.</p>`;
+                    currentWeather.classList.add('hidden');
                 }
             })
             .catch(error => {
                 console.error("Error fetching weather data:", error);
-                weatherDiv.innerHTML = `<p>Error fetching weather data.</p>`;
+                currentWeatherContainer.innerHTML = `<p>Error fetching weather data.</p>`;
+                currentWeather.classList.add('hidden');
             });
     }
 
@@ -90,17 +96,16 @@ document.addEventListener("DOMContentLoaded", function() {
             });
     }
 
-    function displayWeather(data) {
+    function displayCurrentWeather(data) {
         const temperature = data.Temperature.Metric.Value;
         const weather = data.WeatherText;
         const weatherIcon = data.WeatherIcon;
         const weatherContent = `
-            <h2>Current Weather</h2>
             <p>Temperature: ${temperature}°C</p>
             <p>Weather: ${weather}</p>
             <img src="https://developer.accuweather.com/sites/default/files/${String(weatherIcon).padStart(2, '0')}-s.png" alt="${weather}">
         `;
-        weatherDiv.innerHTML = weatherContent;
+        currentWeatherContainer.innerHTML = weatherContent;
     }
 
     function displayDailyForecast(forecasts) {
@@ -126,7 +131,7 @@ document.addEventListener("DOMContentLoaded", function() {
     function displayHourlyForecast(forecasts) {
         let forecastContent = '';
         forecasts.forEach(forecast => {
-            const time = new Date(forecast.DateTime).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+            const time = new Date(forecast.DateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             const temperature = forecast.Temperature.Value;
             const weatherIcon = forecast.WeatherIcon;
             const weatherText = forecast.IconPhrase;

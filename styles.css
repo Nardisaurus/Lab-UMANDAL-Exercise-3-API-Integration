@@ -1,12 +1,10 @@
-/* Define main colors */
 :root {
-    --main-color: #ff1c8e; /* Cherry Pink */
-    --outline-color: #008080; /* Teal */
-    --background-color: #fff8e1; /* Light Retro Background */
-    --text-color: #333333; /* Dark text for readability */
+    --main-color: #ff1c8e;
+    --outline-color: #86d8f7;
+    --background-color: #fefbb1;
+    --text-color: #333333;
 }
 
-/* Global styles */
 body {
     font-family: 'Courier New', Courier, monospace;
     background-color: var(--background-color);
@@ -56,10 +54,23 @@ button:hover {
     color: var(--main-color);
 }
 
-#weather, #daily-forecast, #hourly-forecast {
+#current-weather, #daily-forecast, #hourly-forecast {
     width: 100%;
     max-width: 900px;
     margin-bottom: 20px;
+}
+
+#current-weather {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#current-weather h2, #daily-forecast h2, #hourly-forecast h2 {
+    margin: 0;
+    color: var(--main-color);
+    text-shadow: 1px 1px var(--outline-color);
+    font-size: 1.5em;
 }
 
 .forecast-container {
@@ -85,13 +96,10 @@ button:hover {
     height: 50px;
 }
 
-#daily-forecast h2, #hourly-forecast h2 {
-    margin: 0;
-    color: var(--main-color);
-    text-shadow: 1px 1px var(--outline-color);
-    font-size: 1.5em;
+.p {
+    margin: 5px 0;
 }
 
-p {
-    margin: 5px 0;
+.hidden {
+    display: none;
 }
